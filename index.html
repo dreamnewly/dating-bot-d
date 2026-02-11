@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#ff4757" />
-  <title>EvilCorp: Dating App</title>
+  <title>EvilCorp: Dating App (AI Integrated)</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +12,7 @@
 
   <style>
     /* ==========================================================
-       CSS STYLES
+       CSS STYLES (Остались без изменений)
        ========================================================== */
     *, *::before, *::after { box-sizing: border-box; }
     html, body { height: 100%; }
@@ -99,7 +99,6 @@
       100% { box-shadow: 0 0 0 0 rgba(255,71,87,0); }
     }
     
-    /* Animation Placeholders */
     @keyframes logoFloat { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
     @keyframes logoGlow { 0%, 100% { filter: drop-shadow(0 0 5px rgba(255,71,87,0.2)); } 50% { filter: drop-shadow(0 0 12px rgba(255,71,87,0.5)); } }
 
@@ -203,18 +202,7 @@
     .match:hover { transform: translateY(-3px) scale(1.01); box-shadow: var(--shadow-md); }
     .avatar { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; font-size: 24px; background: #eee; flex: 0 0 auto; background-size: cover; background-position: center; position: relative; }
     
-    /* NEW: Online Status Dot */
-    .online-dot {
-      position: absolute;
-      bottom: 2px;
-      right: 2px;
-      width: 14px;
-      height: 14px;
-      background: #2ed573;
-      border: 2px solid var(--bg-card);
-      border-radius: 50%;
-      z-index: 2;
-    }
+    .online-dot { position: absolute; bottom: 2px; right: 2px; width: 14px; height: 14px; background: #2ed573; border: 2px solid var(--bg-card); border-radius: 50%; z-index: 2; }
 
     .match-info { flex: 1; min-width: 0; }
     .match-name { font-weight: 900; margin: 0; }
@@ -269,6 +257,7 @@
     .chat-input { display: flex; gap: 10px; align-items: center; }
     .send { width: 46px; height: 46px; border-radius: 50%; border: none; cursor: pointer; background: var(--primary); color: #fff; font-size: 18px; transition: transform .2s var(--ease-elastic); }
     .send:hover { transform: rotate(-12deg) scale(1.06); }
+    .typing-indicator { font-size: 12px; color: var(--text-sub); margin-left: 12px; font-style: italic; display: none; }
 
     .toast { position: fixed; left: 50%; top: 18px; transform: translateX(-50%) translateY(-120px); background: var(--text-main); color: var(--bg-card); border-radius: 999px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; box-shadow: 0 18px 60px rgba(0,0,0,.22); z-index: 2000; transition: transform .35s var(--ease-elastic); font-weight: 800; max-width: min(92vw, 720px); }
     .toast.show { transform: translateX(-50%) translateY(0); }
@@ -279,15 +268,23 @@
     .rt-sub { font-size: 13px; color: var(--text-sub); }
     .rt-actions { display: flex; gap: 10px; }
 
+    /* Animation Styles */
+    .gift-anim-container { position: fixed; inset: 0; pointer-events: none; z-index: 5000; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .gift-anim-main { font-size: 120px; animation: popInMain 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: drop-shadow(0 20px 50px rgba(0,0,0,0.3)); z-index: 5002; }
+    @keyframes popInMain { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.4); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+    .gift-particle { position: absolute; font-size: 24px; left: 50%; top: 50%; animation: particleFly 1.5s ease-out forwards; opacity: 0; }
+    @keyframes particleFly { 0% { transform: translate(-50%, -50%) rotate(0deg) scale(0.5); opacity: 1; } 100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) rotate(var(--tr)) scale(0); opacity: 0; } }
+    .gift-specific-item { position: absolute; left: 50%; top: 50%; font-size: 28px; animation: floatGiftItem 1.8s ease-out forwards; opacity: 0; z-index: 5001; }
+    @keyframes floatGiftItem { 0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0; } 15% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); } 100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.5) rotate(var(--r)); opacity: 0; } }
+    .gift-heart { position: absolute; font-size: 20px; color: #ff4757; left: 50%; top: 50%; animation: heartFloat 2s ease-out forwards; }
+    @keyframes heartFloat { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 20% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); } 100% { transform: translate(calc(-50% + var(--hx)), calc(-50% + var(--hy))) rotate(var(--hr)) scale(0); opacity: 0; } }
+    .gift-star { position: absolute; left: 50%; top: 50%; font-size: 32px; color: #ffa502; animation: starPop 0.8s ease-out forwards; }
+    @keyframes starPop { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 50% { opacity: 1; transform: translate(-50%, -50%) scale(1.5); } 100% { transform: translate(-50%, -50%) scale(0); opacity: 0; } }
+    .gift-ring { position: absolute; left: 50%; top: 50%; width: 100px; height: 100px; border-radius: 50%; border: 4px solid transparent; transform: translate(-50%, -50%); animation: ringExpand 1s ease-out forwards; }
+    @keyframes ringExpand { 0% { width: 0; height: 0; opacity: 1; border-width: 8px; } 100% { width: 400px; height: 400px; opacity: 0; border-width: 0; } }
+
     @media (max-width: 1080px) { .main { grid-template-columns: 320px 1fr; } .right { display: none; } }
-    @media (max-width: 820px) {
-      header { top: 0; border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
-      .container { padding: 0; }
-      .main { grid-template-columns: 1fr; padding: 12px; }
-      .left { order: 2; } .center { order: 1; } .right { display: none; }
-      .profile-card { height: 66vh; }
-      nav { gap: 6px; }
-    }
+    @media (max-width: 820px) { header { top: 0; border-radius: 0 0 var(--radius-lg) var(--radius-lg); } .container { padding: 0; } .main { grid-template-columns: 1fr; padding: 12px; } .left { order: 2; } .center { order: 1; } .right { display: none; } .profile-card { height: 66vh; } nav { gap: 6px; } }
   </style>
 </head>
 
@@ -301,7 +298,7 @@
           </span>
           <div>
             <div style="font-size:18px; line-height:1;">Evil<b>Corp</b></div>
-            <div style="font-size:12px; font-weight:800; color:var(--text-sub);">New features • Smart Chat</div>
+            <div style="font-size:12px; font-weight:800; color:var(--text-sub);">AI Powered • Smart Chat</div>
           </div>
         </div>
 
@@ -475,6 +472,7 @@
       <div class="modal-body">
         <div class="chat">
           <div class="chat-log" id="chatLog"></div>
+          <span id="typingIndicator" class="typing-indicator">... печатает</span>
           <div class="chat-input">
             <input class="input" id="chatInput" type="text" placeholder="Сообщение…" />
             <button class="send" onclick="sendMessage()">➤</button>
@@ -495,6 +493,9 @@
     // ==========================================================
     // JS LOGIC
     // ==========================================================
+
+    // ВСТАВЬТЕ СЮДА СВОЙ НОВЫЙ КЛЮЧ
+    const OPENAI_API_KEY = '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'; 
 
     const i18n = {
       ru: {
@@ -618,6 +619,22 @@
     ];
 
     const interestCategories = ['cat_music', 'cat_sport', 'cat_travel', 'cat_gaming', 'cat_art', 'cat_cooking', 'cat_movies', 'cat_tech', 'cat_nature'];
+
+    // Фолбек чат-паттерны (если OpenAI ключ не работает)
+    const chatPatterns = {
+      ru: [
+        { keywords: ['привет', 'здравствуй'], answers: ['Привет! 👋', 'Салют!', 'Как дела?'] },
+        { keywords: ['как дела', 'как ты'], answers: ['Супер! А у тебя?', 'Все отлично, спасибо!'] },
+        { keywords: ['чем занимаешься'], answers: ['Смотрю сериал. А ты?', 'Отдыхаю'] },
+        { keywords: ['пока'], answers: ['До встречи!', 'Пока-пока!'] }
+      ],
+      kz: [
+        { keywords: ['сәлем', 'салам'], answers: ['Сәлем! 👋', 'Қалың қалай?', 'Сәлем бердік!'] },
+        { keywords: ['қалайсың'], answers: ['Жақсы! Өзің ше?', 'Шүкір, жаман емес'] },
+        { keywords: ['не істеп'], answers: ['Демалып отырмын.', 'Музыка тыңдап'] },
+        { keywords: ['сау бол'], answers: ['Көріскенше!', 'Сау бол!'] }
+      ]
+    };
 
     let allProfiles = [...profileDatabase];
     let filteredProfiles = [...allProfiles];
@@ -815,317 +832,86 @@
       log.scrollTop = log.scrollHeight;
     }
 
-    const chatPatterns = {
-  ru: [
-    // --- ПРИВЕТСТВИЯ ---
-    { 
-      keywords: ['привет', 'здравствуй', 'хай', 'ку', 'хеллоу', 'салам', 'саламалейкум', 'здарова', 'йо', 'добрый день', 'добрый вечер'], 
-      answers: [
-        'Привет-привет! 👋 Рада тебя видеть. Как твое настроение сегодня?', 
-        'Салют! 😉 Я как раз думала, кто бы скрасил мой вечер. Как жизнь?', 
-        'О, какие люди! Привет :) Надеюсь, у тебя день прошел лучше, чем у меня? 😅', 
-        'Салам! Рада новому знакомству. Рассказывай, как ты?', 
-        'Ку! 👋 Ты вовремя, мне как раз стало скучно. Развеселишь?'
-      ] 
-    },
-    
-    // --- КАК ДЕЛА ---
-    { 
-      keywords: ['как дела', 'как ты', 'че кого', 'что нового', 'как жизнь', 'че там', 'че каво', 'калай', 'настроение'], 
-      answers: [
-        'Все просто супер, особенно теперь, когда ты написал! 😊 А у тебя как? Много интересного сегодня было?', 
-        'Потихоньку, наслаждаюсь моментом. Сама вся в делах, но для тебя минутку найду 😉 Ты как?', 
-        'Отлично! Сижу, пью кофе и листаю ленту. А ты чем занят? Надеюсь, не грустишь?', 
-        'Жизнь бьет ключом! 💃 Столько планов, столько идей... А у тебя что нового?', 
-        'Знаешь, бывает и лучше, но я стараюсь не унывать. Может, расскажешь что-нибудь веселое?'
-      ] 
-    },
-    
-    // --- ЧЕМ ЗАНЯТА ---
-    { 
-      keywords: ['чем занимаешься', 'что делаешь', 'чем занят', 'че делаешь', 'чем маешься', 'движ', 'планы'], 
-      answers: [
-        'Смотрю новый сериал на Netflix 🎬, пытаюсь не уснуть на самом интересном месте. А ты?', 
-        'Работаю, к сожалению... 👩‍💻 Мечтаю об отпуске и море. А ты отдыхаешь или тоже трудишься?', 
-        'Лежу, залипаю в телефон и слушаю музыку. 🎧 Есть классные треки посоветовать?', 
-        'Думаю, что бы вкусненького поесть. 🍕 Дилемма: пицца или роллы? Помоги выбрать!', 
-        'Жду, когда ты напишешь что-то такое, от чего я улыбнусь 😉 Твой ход!'
-      ] 
-    },
-    
-    // --- ЛОКАЦИЯ (АЛМАТЫ VIBES) ---
-    { 
-      keywords: ['где живешь', 'с какого района', 'какой район', 'откуда ты', 'город', 'адрес', 'местная'], 
-      answers: [
-        'Я живу в самом сердце Алматы ❤️ Люблю гулять по Панфилова. А ты с какого района?', 
-        'Верхняя часть города, поближе к горам, где воздух чище. 🏔️ А ты местный или приезжий?', 
-        'Живу там, где всегда пробки, но зато весело 😂 Угадай район с трех раз!', 
-        'Алматы — мой любимый город. Не представляю жизнь без наших гор и апорта. Ты тоже отсюда?', 
-        'Пока это секрет 😉 Скажем так: если позовешь на кофе в центре, мне будет удобно добраться.'
-      ] 
-    },
-    
-    // --- ВОЗРАСТ ---
-    { 
-      keywords: ['сколько лет', 'какой возраст', 'старая', 'молодая', 'год', 'возраст', 'др'], 
-      answers: [
-        'Я в том прекрасном возрасте, когда уже все можно, но еще не все хочется 😉 Угадаешь?', 
-        'Девушкам такие вопросы задавать опасно! 😂 Но скажем так: я совершеннолетняя и вполне самостоятельная.', 
-        'Мне 18... и еще несколько лет стажа 😂 А тебе сколько, если не секрет?', 
-        'Достаточно взрослая, чтобы не верить в сказки, но достаточно молодая, чтобы их создавать ✨', 
-        'Главное ведь не цифры в паспорте, а то, на сколько себя ощущаешь, верно? 😉'
-      ] 
-    },
-    
-    // --- КОНТАКТЫ ---
-    { 
-      keywords: ['инста', 'instagram', 'ватсап', 'номер', 'телефон', 'цифры', 'ссылку', 'тг', 'телеграм'], 
-      answers: [
-        'Ого, какой ты шустрый! 🤠 Давай сначала тут немного узнаем друг друга, м? Не люблю раздавать номер сразу.', 
-        'Инстаграм — это личное 😉 Заслужи мое доверие интересной беседой, и, может быть, я скину.', 
-        'Я свой номер даю только тем, кто умеет красиво ухаживать... или хотя бы смешно шутить 😂', 
-        'Пока нам и здесь неплохо общается, разве нет? 😉 Расскажи лучше о себе.', 
-        'Сначала кофе и цветы, потом цифры! Шучу, конечно, но давай не будем торопить события.'
-      ] 
-    },
-    
-    // --- ЦЕЛИ ---
-    { 
-      keywords: ['кого ищешь', 'зачем здесь', 'цель', 'ищешь', 'зачем ты тут', 'почему тут'], 
-      answers: [
-        'Ищу человека, с которым можно и посмеяться до слез, и поговорить о серьезном. Ты такой? 😉', 
-        'Хочется найти родственную душу. ❤️ Надоели пустые разговоры, хочется чего-то настоящего.', 
-        'Просто общаюсь, расширяю круг знакомств. А вдруг встречу свою судьбу? Кто знает...', 
-        'Ищу мужа, троих детей и ипотеку! 😂 Шучу-шучу. Просто ищу классного собеседника.', 
-        'Пока не решила. Все зависит от того, кто мне здесь встретится. Может, ты изменишь мои планы?'
-      ] 
-    },
-    
-    // --- КОМПЛИМЕНТЫ ---
-    { 
-      keywords: ['красивая', 'милая', 'супер', 'классная', 'красотка', 'фигура', 'секси', 'огонь', 'соска', 'глаза'], 
-      answers: [
-        'Ой, ну все, я засмущалась... ☺️ Спасибо, ты умеешь делать комплименты!', 
-        'Приятно слышать! Стараюсь держать марку 😉 Ты, судя по общению, тоже очень даже ничего.', 
-        'Мерси! 🥰 Люблю уверенных парней, которые не стесняются говорить приятное.', 
-        'Я знаю 😎 Но от тебя слышать это вдвойне приятно. Продолжай, не останавливайся! 😂', 
-        'Спасибо! Это все гены и хорошее настроение. А что именно тебе во мне понравилось?'
-      ] 
-    },
-    
-    // --- ВСТРЕЧА ---
-    { 
-      keywords: ['встретимся', 'гулять', 'свидание', 'увидимся', 'пойдем', 'кофе', 'кино', 'кальян', 'ужин', 'бар'], 
-      answers: [
-        'Хм, заманчивое предложение! 🤔 Я люблю вкусный кофе и уютные места. Куда приглашаешь?', 
-        'Я только за, но давай сначала немного пообщаемся здесь? Хочу убедиться, что ты не маньяк 😂', 
-        'На выходных я, возможно, буду свободна. Если удивишь меня выбором места — я согласна!', 
-        'С удовольствием! Как насчет прогулки в парке или похода в кино? 🍿 Пиши варианты.', 
-        'Оу, полегче! 😉 Но вообще я не против. Люблю спонтанные решения. Когда ты свободен?'
-      ] 
-    },
-    
-    // --- БОТ ПРОВЕРКА ---
-    { 
-      keywords: ['ты бот', 'робот', 'фейк', 'нейросеть', 'ии', 'gpt', 'ненастоящая'], 
-      answers: [
-        'Я самая настоящая! 😡 Могу даже ущипнуть при встрече, чтобы ты поверил. Не обижай меня!', 
-        'Ну вот, опять... Почему всем умным и красивым девушкам говорят, что они боты? 🥺 Я живая!', 
-        'Нет, я просто очень быстро печатаю и всегда знаю, что ответить 😉 Разве это преступление?', 
-        'Был бы я роботом, я бы уже захватила мир! 🌍 А я пока просто пытаюсь найти с тобой общий язык.', 
-        'А ты пройди капчу: выбери все картинки со светофорами! 🚦 Шучу. Я человек, честно.'
-      ] 
-    },
-    
-    // --- СЛЕНГ / ЮМОР ---
-    { 
-      keywords: ['ахах', 'лол', 'кек', 'смешно', '))', '😂', 'ору', 'угар', 'ржу'], 
-      answers: [
-        'Рада, что подняла тебе настроение! 😄 Смех продлевает жизнь, так что мы с тобой будем жить вечно.', 
-        'Люблю парней с хорошим чувством юмора! Это сейчас такая редкость. 😉', 
-        '😂 Самой смешно! Ну, хоть не скучно нам с тобой.', 
-        '))))) Вижу улыбку через экран! Кстати, у тебя красивая улыбка? 😉', 
-        'Ну вот, лед тронулся! Теперь можно и о серьезном поговорить... или продолжим смеяться?'
-      ] 
-    },
-    
-    // --- ПРОЩАНИЕ ---
-    { 
-      keywords: ['пока', 'до встречи', 'спокойной ночи', 'снов', 'давай', 'бб', 'офф'], 
-      answers: [
-        'Пока-пока! 👋 Было очень приятно поболтать. Не забывай писать мне!', 
-        'Сладких снов! 🌙 Пусть тебе приснюсь я... ну или хотя бы что-то приятное 😉', 
-        'Не пропадай надолго! Я буду ждать твоего сообщения. До скорого! 😘', 
-        'Хорошо тебе отдохнуть! Пиши, как освободишься, я всегда рада тебе. 👋', 
-        'Целую! 😘 Надеюсь, завтра мы продолжим наше общение.'
-      ] 
-    }
-  ],
-  
-  kz: [
-    // --- СӘЛЕМДЕСУ ---
-    { 
-      keywords: ['сәлем', 'салам', 'ассалаумагалейкум', 'хай', 'қал қалай', 'не хабар', 'ассалам'], 
-      answers: [
-        'Сәлем! 👋 Қалың қалай? Бүгінгі күнің сәтті өтіп жатыр ма? Менде бәрі керемет! 😊', 
-        'Уағалейкумассалам! Қандай жақсы, жазып қалдың. Көңіл-күйің қалай, батырым? 😉', 
-        'Салют! 🌟 Сені көргеніме (дәлірек айтсам, оқығаныма) қуаныштымын. Не жаңалық?', 
-        'Сәлем! Қай жақтан боласың? Танысып қояйық, бәлкім ортақ әңгімеміз жарасып кетер.', 
-        'Оо, сәлем! 👋 Мен дәл сен жазады-ау деп күтіп отырғандаймын. Қалайсың?'
-      ] 
-    },
-    
-    // --- ҚАЛ-ЖАҒДАЙ ---
-    { 
-      keywords: ['қалайсың', 'қалайсыз', 'не жаңалық', 'халің қалай', 'қалай өзің', 'тыныштық па', 'не боп жатыр'], 
-      answers: [
-        'Керемет! Өмірім қызыққа толы 😊 Өзің қалайсың? Жұмыс, оқу қалай болып жатыр?', 
-        'Шүкір, бәрі ойдағыдай! 🌸 Сенің хабарламаңды оқып, одан сайын жақсы болып қалды. Өзің ше?', 
-        'Бәрі баяғыша: жұмыс, үй, арасында инстаграм. 😄 Сенде қандай қызық жаңалықтар бар?', 
-        'Жаман емес, бірақ біраз шаршаңқырап жүрмін. Сен мені көңілді әңгімемен сергітіп жіберші! 😉', 
-        'Күшті! Алматының ауа-райы сияқты құбылмалы емес, тұрақты жақсы! 😂 Сенде ше?'
-      ] 
-    },
-    
-    // --- НЕ ІСТЕП ЖАТЫРСЫҢ ---
-    { 
-      keywords: ['не істеп', 'не істеватсын', 'нестеватсын', 'нестеватс', 'не істеп жатырсың', 'не қылып', 'қайдасың'], 
-      answers: [
-        'Жұмыстан босап, кішкене демалып отырмын 🎬 Кино көрсем бе деп ойлап... Кеңесің бар ма?', 
-        'Жай, телефон шұқып, музыка тыңдап жатырмын 🎧 Сенің жазғаныңды күтіп отырғам, сезгендейсің! 😉', 
-        'Шай ішіп отырмын ☕ Қазақтың шайынсыз өмір жоқ қой! Кел, бірге ішейік?', 
-        'Тамақ пісіріп жүрмін, мен өзім керемет хозяюшкамын ғой 🍳 Сен қандай тамақ жақсы көресің?', 
-        'Достарыммен қыдырып жүрмін, бірақ саған жауап беруге уақыт таптым. 😉 Бағала!'
-      ] 
-    },
-    
-    // --- РУ / ЖЕРЛЕС ---
-    { 
-      keywords: ['руың', 'руын', 'руің', 'қай жүз', 'руыңыз', 'қай жақ', 'қайдансың'], 
-      answers: [
-        'Қазақпын ғой! 🇰🇿 Ру сұрасаң, туыс болып шығамыз деп қорқамын 😂 Сен өзің қай жақтансың?', 
-        'Мен Алматының қызымын 🍎 Тауды, алманы және дәмді кофені жақсы көремін. Сен ше?', 
-        'Руым — Найман (қалжың ғой) 😉 Негізі оның маңызы бар ма? Бастысы жанымыз жарасн!', 
-        'Оңтүстіктенмін бе, Батыстанмын ба, әлде Шығыс па... Құпия болып қалсын 😉 Жұмбақ қыз ұнай ма?', 
-        'Менің руымды білгің келсе, алдымен кездесуге шақыр! 😂 Сол жерде шежіре тарқатамыз.'
-      ] 
-    },
-    
-    // --- КОНТАКТ / ИНСТА ---
-    { 
-      keywords: ['инста', 'ватсап', 'номер', 'тел', 'нөмір', 'инстаграм', 'whats', 'цифры', 'желі'], 
-      answers: [
-        'Асықпасайшы, жігіт... 😉 Алдымен сөйлесейік, мінезіміз сәйкес келе ме, көрейік. Сосын нөмір болады.', 
-        'Инстаграмды кейінірек берейін, қазір осы жерде сырласайық. 😊 Сенің қандай қызығушылығың бар?', 
-        'Қыздың нөмірін алу үшін еңбектену керек, оңайлықпен бермеймін 😎 Бірақ сенде мүмкіндік бар!', 
-        'Ватсапқа өтсек, романтика жоғалып кетеді ғой! 😂 Осында сөйлесе тұрайықшы.', 
-        'Егер әңгімеміз қызық болса, өзім-ақ жазып беремін. Әзірге өзің туралы айтып берші.'
-      ] 
-    },
-    
-    // --- МАҚСАТ ---
-    { 
-      keywords: ['кімді іздеп', 'мақсатың', 'не іздеп', 'жігіт', 'танысу', 'не үшін', 'кім керек'], 
-      answers: [
-        'Жақсы адам іздеп жүрмін, түсінігі мол, әзілдей алатын. 😉 Сен сондай сияқтысың ба?', 
-        'Махаббат іздеп жүрмін ❤️ Болашақ жарымды тапқым келеді. Үмітім үзілген жоқ!', 
-        'Жәй ғана сөйлесіп, уақыт өткізуге кірдім. Бірақ кім біледі, мүмкін тағдыр шығарсың? ✨', 
-        'Күйеу іздеп жүрмін! 😂 Қалжың. Негізі, мағыналы әңгіме айтатын адам керек.', 
-        'Сені іздеп жүрмін ғой! 😉 Таптым-ау деймін, әлде қателестім бе?'
-      ] 
-    },
-    
-    // --- КОМПЛИМЕНТ ---
-    { 
-      keywords: ['әдемісің', 'сұлусың', 'күшті', 'ұнадың', 'сұлу', 'красотка', 'тәтті', 'жаным', 'күнім', 'сылу'], 
-      answers: [
-        'Рахмет үлкен! ☺️ Сен мені ұялтып жібердің ғой... Өзің де сүйкімді жігіт сияқтысың.', 
-        'Жаным дейсің бе? Әлі ерте емес пе? 😂 Бірақ маған ұнап тұр, жалғастыра бер!', 
-        'Рахмет! 🥰 Жылы сөз жанды жылытады. Сен қыздарға жиі осылай айтасың ба?', 
-        'Сен де "ниче" екенсің 😉 Маған сенімді жігіттер ұнайды. Тағы қандай өнерің бар?', 
-        'Ой, қойшы енді... 😊 (іштей қуанып тұрмын). Рахмет, өте жағымды!'
-      ] 
-    },
-    
-    // --- КЕЗДЕСУ ---
-    { 
-      keywords: ['кездесейік', 'қыдырайық', 'шығайық', 'жолығайық', 'кофе', 'шай', 'тамақ', 'парк'], 
-      answers: [
-        'Кеттік! Маған табиғат аясында серуендеген ұнайды 🌳 Қай жерге барамыз? Ұсынысың бар ма?', 
-        'Қашан босайсың? Мен демалыс күндері боспын. Киноға немесе дәмді тамаққа баруға қарсы емеспін! 🍕', 
-        'Ет ассаң ғана барамын! 😂 Қазақтың қызымыз ғой. Қалжың, кофе ішуге болады.', 
-        'Барайық! Бірақ алдымен маған уәде бер: көңілсіз отырмаймыз! 😉 Келістік пе?', 
-        'Алматының қай жерінде? Медеуге немесе Көктөбеге шықсақ қайтеді? 🏔️ Романтика ғой...'
-      ] 
-    },
-    
-    // --- БОТ ---
-    { 
-      keywords: ['бот', 'робот', 'фейк', 'өтірік', 'шын ба'], 
-      answers: [
-        'Жоқ, мен тірі адаммын! 😡 Қалай дәлелдесем болады? Жүрегім бар, сезімім бар ❤️', 
-        'Қойшы, қалжыңдама! Боттар дәл мен сияқты әдемі сөйлей алмайды 😉 Сенбейсің бе?', 
-        'Бот емеспін, жай ғана пернетақтада жүйрікпін. 🚀 Сен өзің робот шығарсың?', 
-        'Мені ренжітпе... 🥺 Мен нағыз қазақтың қарапайым қызымын ғой!', 
-        'Егер мен бот болсам, сен кіммен сөйлесіп отырсың? 😂 Логика қайда, жаным?'
-      ] 
-    },
-    
-    // --- СЛЕНГ (KZ) ---
-    { 
-      keywords: ['базар жоқ', 'тема', 'зың', 'жыынды', 'күшті', 'жарайсың', 'красавчик', 'от души'], 
-      answers: [
-        'Әңгіме жоқ қой! 😎 Біз сондаймыз. Сен де осал емессің-ау деймін?', 
-        'Өзің де зыңсың! 😉 Осындай позитивті адамдармен сөйлескен ұнайды.', 
-        'Рахмет! Стараюсь ғой 😉 Сенен үйреніп жатырмын барлығын.', 
-        'Базар жоқ па? Ну, болмаса болмасын! 😂 Бастысы көңіл-күй күшті болсын.', 
-        'От души рахмет! ✊ Сыйластығымыз жарассын!'
-      ] 
-    },
-    
-    // --- ҚОШТАСУ ---
-    { 
-      keywords: ['сау бол', 'көріскенше', 'қайырлы түн', 'жақсы жат', 'кеттім', 'ұйықтайм', 'ертең'], 
-      answers: [
-        'Сау бол! 👋 Хабарласып тұр, ұмытып кетпе! Жауабыңды күтемін.', 
-        'Жақсы демал! Түсіңде мені көр... тек жақсы жағынан 😉 Қайырлы түн! 🌙', 
-        'Көріскенше! Бүгінгі әңгіме үшін рахмет, маған ұнады. 🥰', 
-        'Жақсы жат! Ертең міндетті түрде жаз, мен күтемін. Бб! 👋', 
-        'Ал, мен де кеттім. Тәтті түстер көр! 😘 Сау бол!'
-      ] 
-    }
-  ]
-};
-    const defaultReplies = {
-      ru: ['Интересно...', 'Расскажи еще 😄', 'Хмм, понятно.', 'Прикольно!', 'Да ладно?', 'Серьезно? 😯', 'Ахах, точно!', 'Слушай, а ты часто тут сидишь?'],
-      kz: ['Қызық екен...', 'Тағы не айтасың? 😄', 'Түсінікті.', 'Күшті!', 'Мәссаған!', 'Шын ба? 😯', 'Ахах, иә!', 'Мұнда жиі кіресің бе?']
-    };
-    function getSmartReply(text) {
+    async function fetchOpenAIResponse(userMessage, matchProfile, chatHistory) {
+  // Очищаем ключ от пробелов и невидимых символов
+  const cleanKey = OPENAI_API_KEY.replace(/[^\x00-\x7F]/g, "").trim();
+
+  if (!cleanKey || cleanKey.includes('ВСТАВЬТЕ')) {
+    console.error("Ошибка: API ключ не установлен или содержит ошибки!");
+    return getFallbackReply(userMessage);
+  }
+
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Используем очищенный ключ
+        'Authorization': 'Bearer ' + cleanKey 
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo", 
+        messages: [
+          { role: "system", content: `You are ${matchProfile.name}. Bio: ${matchProfile.bio}.` },
+          { role: "user", content: userMessage }
+        ],
+        temperature: 0.7
+      })
+    });
+
+    const data = await response.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.choices[0].message.content;
+
+  } catch (error) {
+    console.error("AI Error:", error);
+    return getFallbackReply(userMessage);
+  }
+}
+
+    function getFallbackReply(text) {
       const lower = text.toLowerCase();
       const currentLang = lang === 'kz' ? 'kz' : 'ru'; 
       const patterns = chatPatterns[currentLang];
       for (let p of patterns) {
         if (p.keywords.some(k => lower.includes(k))) return p.answers[Math.floor(Math.random() * p.answers.length)];
       }
-      const defaults = defaultReplies[currentLang];
-      return defaults[Math.floor(Math.random() * defaults.length)];
+      return currentLang === 'kz' ? 'Қызық екен... 😄' : 'Интересно... расскажи еще 😄';
     }
-    function sendMessage() {
+
+    async function sendMessage() {
       if (!currentChatId) return;
       const input = $('#chatInput');
       const text = input.value.trim();
       if (!text) return;
+
+      // 1. Сохраняем и показываем сообщение пользователя
       chats[currentChatId] = chats[currentChatId] || [];
+      const history = [...chats[currentChatId]]; // Копия истории до нового сообщения
       chats[currentChatId].push({ me: true, text, ts: Date.now() });
       input.value = '';
       renderChat();
       save();
-      setTimeout(() => {
-        const replyText = getSmartReply(text);
-        chats[currentChatId].push({ me: false, text: replyText, ts: Date.now() });
-        renderChat();
-        save();
-      }, 800 + Math.random() * 1000); 
+
+      // 2. Показываем индикатор печати
+      const indicator = $('#typingIndicator');
+      if (indicator) indicator.style.display = 'block';
+      const log = $('#chatLog');
+      log.scrollTop = log.scrollHeight;
+
+      // 3. Получаем данные профиля для контекста
+      const profile = allProfiles.find(p => String(p.id) === currentChatId) || {};
+      
+      // 4. Запрос к AI (с искусственной задержкой для реализма)
+      const aiReply = await fetchOpenAIResponse(text, profile, history);
+      
+      // Скрываем индикатор
+      if (indicator) indicator.style.display = 'none';
+
+      // 5. Сохраняем ответ бота
+      chats[currentChatId].push({ me: false, text: aiReply, ts: Date.now() });
+      renderChat();
+      save();
     }
 
     function renderGifts() {
@@ -1151,74 +937,63 @@
     function triggerGiftAnimation(emoji) {
       const container = document.createElement('div');
       container.className = 'gift-anim-container';
+      
       const main = document.createElement('div');
       main.textContent = emoji;
       main.className = 'gift-anim-main';
       container.appendChild(main);
-      const particles = ['✨', '⭐', '💖', '💥', '🌟', '💫', '⚡', '🎉', '🎊', '💝'];
-      for (let i = 0; i < 30; i++) {
+      
+      for (let i = 0; i < 24; i++) {
         const p = document.createElement('div');
-        p.textContent = particles[Math.floor(Math.random() * particles.length)];
-        p.className = 'gift-particle';
-        const angle = (i / 30) * Math.PI * 2 + Math.random() * 0.3;
-        const dist = 180 + Math.random() * 250;
-        p.style.setProperty('--tx', `${Math.cos(angle) * dist}px`);
-        p.style.setProperty('--ty', `${Math.sin(angle) * dist}px`);
-        p.style.setProperty('--tr', `${Math.random() * 1080}deg`);
-        p.style.animationDelay = (Math.random() * 0.4) + 's';
+        p.textContent = emoji; 
+        p.className = 'gift-specific-item';
+        const angle = (Math.random() * Math.PI * 2);
+        const dist = 100 + Math.random() * 250;
+        const tx = Math.cos(angle) * dist;
+        const ty = Math.sin(angle) * dist;
+        const rot = Math.random() * 360;
+        p.style.setProperty('--tx', `${tx}px`);
+        p.style.setProperty('--ty', `${ty}px`);
+        p.style.setProperty('--r', `${rot}deg`);
+        p.style.animationDelay = (Math.random() * 0.3) + 's';
         container.appendChild(p);
       }
-      const hearts = ['💕', '💖', '💗', '💓', '💝', '❤️', '💙', '💚', '💛', '🧡'];
-      for (let i = 0; i < 16; i++) {
+
+      const hearts = ['💕', '💖', '💗', '💓', '💝', '❤️'];
+      for (let i = 0; i < 12; i++) {
         const heart = document.createElement('div');
         heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
         heart.className = 'gift-heart';
-        const angle = (i / 16) * Math.PI * 2;
-        const dist = 140 + Math.random() * 100;
+        const angle = (i / 12) * Math.PI * 2;
+        const dist = 180 + Math.random() * 100;
         heart.style.setProperty('--hx', `${Math.cos(angle) * dist}px`);
         heart.style.setProperty('--hy', `${Math.sin(angle) * dist}px`);
         heart.style.setProperty('--hr', `${Math.random() * 720 - 360}deg`);
-        heart.style.animationDelay = (i * 0.04) + 's';
+        heart.style.animationDelay = (i * 0.05) + 's';
         container.appendChild(heart);
       }
-      const confettiColors = ['#FF4757', '#ff6b81', '#5352ed', '#2ed573', '#ffa502', '#ff6348', '#f368e0', '#48dbfb', '#ff9ff3', '#feca57', '#ee5a6f', '#c44569', '#786fa6', '#f8b500', '#63cdda'];
-      for (let i = 0; i < 40; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'gift-confetti';
-        confetti.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
-        confetti.style.setProperty('--cx', `${(Math.random() - 0.5) * 600}px`);
-        confetti.style.setProperty('--cr', `${Math.random() * 1080}deg`);
-        confetti.style.animationDelay = (Math.random() * 0.8) + 's';
-        container.appendChild(confetti);
-      }
-      for (let i = 0; i < 8; i++) {
+
+      for (let i = 0; i < 6; i++) {
         const star = document.createElement('div');
-        star.textContent = ['⭐', '🌟', '✨'][Math.floor(Math.random() * 3)];
+        star.textContent = '✨';
         star.className = 'gift-star';
-        star.style.animationDelay = (i * 0.15) + 's';
+        star.style.left = (40 + Math.random() * 20) + '%';
+        star.style.top = (40 + Math.random() * 20) + '%';
+        star.style.animationDelay = (i * 0.1) + 's';
         container.appendChild(star);
       }
-      const ringColors = ['rgba(255, 71, 87, 0.7)', 'rgba(83, 82, 237, 0.7)', 'rgba(46, 213, 115, 0.7)', 'rgba(255, 165, 2, 0.7)'];
-      for (let i = 0; i < 4; i++) {
+
+      const ringColors = ['rgba(255, 71, 87, 0.5)', 'rgba(83, 82, 237, 0.5)'];
+      for (let i = 0; i < 3; i++) {
         const ring = document.createElement('div');
         ring.className = 'gift-ring';
-        ring.style.borderColor = ringColors[i];
-        ring.style.animationDelay = (i * 0.2) + 's';
+        ring.style.borderColor = ringColors[i % 2];
+        ring.style.animationDelay = (i * 0.15) + 's';
         container.appendChild(ring);
       }
-      for (let i = 0; i < 20; i++) {
-        const sparkle = document.createElement('div');
-        sparkle.textContent = '✨';
-        sparkle.className = 'gift-sparkle';
-        const angle = Math.random() * Math.PI * 2;
-        const dist = 100 + Math.random() * 150;
-        sparkle.style.setProperty('--sx', `${Math.cos(angle) * dist}px`);
-        sparkle.style.setProperty('--sy', `${Math.sin(angle) * dist}px`);
-        sparkle.style.animationDelay = (Math.random() * 0.5) + 's';
-        container.appendChild(sparkle);
-      }
+
       document.body.appendChild(container);
-      setTimeout(() => { if (container.isConnected) container.remove(); }, 4000);
+      setTimeout(() => { if (container.isConnected) container.remove(); }, 3500);
     }
     
     function renderInterests() {
@@ -1243,13 +1018,9 @@
     function verifyProfile() { isVerified = true; updateMe(); updateBadges(); save(); toast('📸', t('toast_verified')); }
     function updateMe() { const n = $('#inpName').value.trim() || 'User'; const c = $('#inpCity').value || '—'; $('#meName').textContent = n; $('#meCity').textContent = c; }
     
-    // ==========================================================
-    // UPDATED RENDER ONLINE FUNCTION (With photos)
-    // ==========================================================
     function renderOnline() {
       const list = $('#onlineList'); list.innerHTML = '';
       
-      // Filter for online users only
       const onlineUsers = allProfiles.filter(p => p.online).slice(0, 6);
       
       onlineUsers.forEach(p => {
@@ -1260,16 +1031,13 @@
           photoIdx = 0; showSection('browse'); displayProfile(); toast('🟢', `${p.name} online`);
         };
         
-        // Logic for Avatar Image
         let avatarStyle = '';
         let avatarContent = p.emoji;
         
         if (p.image && p.image.startsWith('http')) {
-          // If image link exists, use it as background
           avatarStyle = `background-image: url('${p.image}'); background-size: cover; background-position: center;`;
-          avatarContent = ''; // Remove emoji
+          avatarContent = '';
         } else {
-          // Fallback to gradient
           avatarStyle = `background: ${photoGradients[p.id % photoGradients.length]};`;
         }
         
@@ -1296,7 +1064,7 @@
       document.documentElement.setAttribute('data-lang', lang);
       shuffle(allProfiles); filteredProfiles = [...allProfiles];
       renderDots(4); 
-      renderOnline(); // Call Updated Function
+      renderOnline();
       renderGifts(); renderMatches(); displayProfile();
       load(); updateMe(); updateBadges(); applyI18n();
       $('#verifiedSmall').textContent = isVerified ? '✓' : '—';
@@ -1313,6 +1081,4 @@
     init();
   </script>
 </body>
-
 </html>
-
